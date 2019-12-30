@@ -1,0 +1,50 @@
+<?php
+
+class Person {
+	protected $nombre;
+	protected $apellido;
+	protected $nickName;
+	public $changeNickName = 0;
+	protected $fechaNacimiento;
+	public function __construct($nombre, $apellido, $nickname, $fechaNacimiento)
+	{
+		$this->nombre = $nombre;
+		$this->apellido = $apellido;
+		$this->nickName = $nickname;
+		$this->fechaNacimiento = $fechaNacimiento;
+	}
+	public function setNickName($nickName) {
+		if($this->changeNickName < 2) {
+			if(strlen($nickName) > 2) {
+				if($nickName == $this->nombre || $nickName == $this->apellido) {
+					throw new Exception('Por favor, tu usuario no debe ser igual al nombre o apellido');
+				} else {
+					$this->nickName = $nickName;
+					$this->changeNickName++;
+				}
+			} else {
+				throw new Exception('Por favor, tu usuario debe contener mas de 2 letras');
+			}
+		} else {
+			throw new Exception('No se puede cambiar tu usuario mas de 2 veces');
+		}
+	}
+	public function getName() {
+		return $this->nombre;
+	}
+	public function getApellido() {
+		return $this->apellido;
+	}
+	public function getNickName() {
+		return $this->nickName;
+	}
+	public function getAge() {
+		$cumpleanos = new DateTime($this->fechaNacimiento);
+		$hoy = new DateTime();
+		$birthday = $hoy->diff($cumpleanos);
+		return $birthday->y;
+	}
+}
+$person1 = new Person('Moises', 'Ramirez', 'Mramirez11', '1996-04-16');
+$person1->setNickName('Mramirez11');
+echo "Su nombre es {$person1->getName()}, su apellido es {$person1->getApellido()}, su nick es {$person1->getNickName()} y su edad es de {$person1->getAge()} años";
